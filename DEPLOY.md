@@ -3,6 +3,20 @@
 I cannot create the endpoint inside **your** RunPod account from this machine.  
 Follow the official worker flow below; this folder is the custom image + volume prep.
 
+## If you see: `runpod.serverless.start() handler not found`
+
+RunPod’s **GitHub** deploy **scans your repo source** for a handler.  
+A thin repo that only has `FROM runpod/worker-comfyui` has the **real** handler inside the **Docker image**, not in git — so the UI warns.
+
+**Fix (already in this package):**
+
+1. Ensure repo root has `handler.py` containing `runpod.serverless.start` (stub is fine for the scan).
+2. Ensure `Dockerfile` keeps base image **`CMD ["/start.sh"]`** (real Comfy worker).
+3. `git add handler.py Dockerfile && git commit && git push`
+4. Create/redeploy the endpoint from GitHub again.
+
+**Alternative (no GitHub scan):** Serverless → Template → set **Container image** to a built image name (Docker Hub), not “import repo only.”
+
 References:
 
 - [worker-comfyui](https://github.com/runpod-workers/worker-comfyui)
