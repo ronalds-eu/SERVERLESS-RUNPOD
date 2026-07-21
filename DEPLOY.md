@@ -5,17 +5,50 @@ Follow the official worker flow below; this folder is the custom image + volume 
 
 ## If you see: `runpod.serverless.start() handler not found`
 
-RunPod’s **GitHub** deploy **scans your repo source** for a handler.  
-A thin repo that only has `FROM runpod/worker-comfyui` has the **real** handler inside the **Docker image**, not in git — so the UI warns.
+RunPod GitHub deploy scans the **repo** for a handler like [worker-basic](https://github.com/runpod-workers/worker-basic) (`rp_handler.py`).
 
-**Fix (already in this package):**
+### Path A — Fix this repo (try first)
 
-1. Ensure repo root has `handler.py` containing `runpod.serverless.start` (stub is fine for the scan).
-2. Ensure `Dockerfile` keeps base image **`CMD ["/start.sh"]`** (real Comfy worker).
-3. `git add handler.py Dockerfile && git commit && git push`
-4. Create/redeploy the endpoint from GitHub again.
+Repo root must include:
 
-**Alternative (no GitHub scan):** Serverless → Template → set **Container image** to a built image name (Docker Hub), not “import repo only.”
+| File | Purpose |
+|------|--------|
+| `rp_handler.py` | **Required name** — has `runpod.serverless.start` |
+| `handler.py` | optional alias |
+| `requirements.txt` | includes `runpod` |
+| `test_input.json` | optional for local/tests |
+| `Dockerfile` | `FROM worker-comfyui` + LTX nodes, **`CMD ["/start.sh"]`** |
+
+```bash
+git add rp_handler.py handler.py requirements.txt test_input.json Dockerfile README.md
+git commit -m "Match worker-basic handler layout for RunPod GitHub scan"
+git push origin main
+```
+
+Then in RunPod: **new** endpoint from GitHub (or rebuild), branch `main`, Dockerfile path `.` / `Dockerfile`.
+
+If the UI **still** blocks, use Path B (more reliable for Comfy).
+
+### Path B — Fork official worker-comfyui (recommended if A fails)
+
+1. On GitHub: fork https://github.com/runpod-workers/worker-comfyui  
+2. In your fork’s `Dockerfile` (after Comfy install / custom nodes section), add LTX clones, **or** append a small stage that installs:
+
+```dockerfile
+WORKDIR /comfyui/custom_nodes
+RUN git clone --depth 1 https://github.com/Lightricks/ComfyUI-LTXVideo.git \
+ && pip install -r ComfyUI-LTXVideo/requirements.txt || true
+RUN git clone --depth 1 https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git || true
+RUN git clone --depth 1 https://github.com/kijai/ComfyUI-KJNodes.git || true
+WORKDIR /
+```
+
+3. Deploy **that fork** via RunPod GitHub — it already has real `handler.py` + `start.sh`.  
+4. Attach network volume for models.
+
+### Path C — No GitHub import
+
+Build/push image elsewhere → Serverless **Template** → paste image name only (skips repo handler scan).
 
 References:
 
