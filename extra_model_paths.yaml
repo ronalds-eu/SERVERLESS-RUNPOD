@@ -1,0 +1,22 @@
+# Extends official worker paths so LTX text encoders / diffusion models on the
+# network volume are discovered. Mount root: /runpod-volume (Serverless).
+#
+# Official base only maps checkpoints, clip, loras, vae, … — NOT text_encoders.
+# That is why LTXAVTextEncoderLoader saw options: [].
+
+runpod_worker_comfy:
+  base_path: /runpod-volume
+  checkpoints: models/checkpoints/
+  text_encoders: models/text_encoders/
+  clip: models/clip/
+  clip_vision: models/clip_vision/
+  configs: models/configs/
+  controlnet: models/controlnet/
+  embeddings: models/embeddings/
+  loras: models/loras/
+  upscale_models: models/upscale_models/
+  vae: models/vae/
+  unet: models/unet/
+  diffusion_models: models/diffusion_models/
+  latent_upscale_models: models/latent_upscale_models/
+  model_patches: models/model_patches/

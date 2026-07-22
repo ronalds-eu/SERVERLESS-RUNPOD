@@ -30,4 +30,7 @@ RUN comfy-node-install comfyui-kjnodes || true
 RUN comfy-node-install comfyui-videohelpersuite || \
     (cd /comfyui/custom_nodes && git clone --depth 1 https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git || true)
 
+# Map network-volume model folders (includes text_encoders — missing in stock base)
+COPY extra_model_paths.yaml /comfyui/extra_model_paths.yaml
+
 WORKDIR /
