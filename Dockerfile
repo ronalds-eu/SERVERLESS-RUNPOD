@@ -4,7 +4,10 @@
 # Real handler: CMD /start.sh from base image
 # Models: network volume at /runpod-volume/models (symlinks from your pod)
 
-FROM runpod/worker-comfyui:5.1.0-base
+# Use a current official base (newer Comfy than 5.1.0 — better LTX / video nodes).
+# Tags: https://github.com/runpod-workers/worker-comfyui/releases
+# Images: runpod/worker-comfyui:<version>-base
+FROM runpod/worker-comfyui:5.8.6-base
 
 # Keep official entrypoint (Comfy + RunPod handler)
 CMD ["/start.sh"]
