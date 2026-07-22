@@ -78,19 +78,35 @@ Also confirm text encoder / Gemma path used by your working pod workflow.
 
 ## B. Build custom worker image (on a machine with Docker, linux/amd64)
 
+The image installs **opencv-python-headless**, **imageio-ffmpeg**, and pins **kornia==0.8.1**
+so VideoHelperSuite and ComfyUI-LTXVideo import cleanly (fixes `cv2` / `pad` errors in worker logs).
+
 ```bash
 cd serverless-ltx-i2v
 
 # pin version if you prefer a newer base tag from:
 # https://github.com/runpod-workers/worker-comfyui/releases
 
-docker build --platform linux/amd64 -t YOUR_DOCKERHUB_USER/worker-comfyui-ltx-i2v:v1 .
+# bump the tag whenever you change Dockerfile / requirements
+docker build --platform linux/amd64 -t YOUR_DOCKERHUB_USER/worker-comfyui-ltx-i2v:v2 .
 
 docker login
-docker push YOUR_DOCKERHUB_USER/worker-comfyui-ltx-i2v:v1
+docker push YOUR_DOCKERHUB_USER/worker-comfyui-ltx-i2v:v2
 ```
 
+Then point the Serverless **template** at the new tag (`:v2`) and save/redeploy the endpoint.
+
 **Or** push this folder to GitHub and use RunPod **Start from GitHub Repo** (builds Dockerfile for you).
+
+### After deploy — confirm custom nodes load
+
+In worker logs you want:
+
+- **no** `IMPORT FAILED: comfyui-videohelpersuite`
+- **no** `Cannot import ... ComfyUI-LTXVideo ... pad`
+- path line: `Adding extra search path text_encoders /runpod-volume/models/text_encoders`
+
+Submit jobs with `{"input":{"workflow":...}}` only (see `workflows/payload-t2v.json`).
 
 ---
 

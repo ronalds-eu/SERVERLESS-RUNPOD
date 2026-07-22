@@ -1,1 +1,13 @@
+# RunPod GitHub handler scan (and local tests)
 runpod
+
+# --- Worker image extras (also installed by Dockerfile) ---
+# Fixes from production logs:
+#   ModuleNotFoundError: No module named 'cv2'  (VideoHelperSuite)
+#   Failed to import imageio_ffmpeg             (VideoHelperSuite)
+#   ImportError: cannot import name 'pad' from
+#     'kornia.geometry.transform.pyramid'       (ComfyUI-LTXVideo)
+opencv-python-headless>=4.8.0
+imageio-ffmpeg>=0.4.9
+# Pin: newer kornia drops re-export of pad on geometry.transform.pyramid
+kornia==0.8.1
