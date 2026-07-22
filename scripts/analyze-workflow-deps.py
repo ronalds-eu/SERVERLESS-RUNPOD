@@ -61,6 +61,10 @@ KNOWN_PACKS: dict[str, dict[str, str]] = {
         "what": "Licon MSR",
         "install": "git clone https://github.com/liconstudio/ComfyUI-Licon-MSR.git",
     },
+    "ComfyUI-BFSNodes": {
+        "what": "BFSNodes (alisson-anjos)",
+        "install": "git clone https://github.com/alisson-anjos/ComfyUI-BFSNodes.git",
+    },
 }
 
 # class_type / type name patterns → pack key

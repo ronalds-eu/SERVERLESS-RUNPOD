@@ -88,6 +88,7 @@ plus custom nodes for MSR workflows:
 | Licon MSR | liconstudio/ComfyUI-Licon-MSR |
 | KJNodes for ComfyUI | kijai/ComfyUI-KJNodes |
 | ComfyUI-PromptRelay | kijai/ComfyUI-PromptRelay |
+| ComfyUI-BFSNodes | alisson-anjos/ComfyUI-BFSNodes |
 
 ```bash
 cd serverless-ltx-i2v

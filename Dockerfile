@@ -1,9 +1,9 @@
 # Official worker-comfyui + custom nodes for LTX MSR / Ingredients workflows
 # Docs: https://github.com/runpod-workers/worker-comfyui/blob/main/docs/customization.md
 #
-# Manager "missing" list for MSR-V2-LTX-INGREDIENTS-OMNINFT:
+# Custom nodes for MSR / Ingredients workflows:
 #   ComfyUI-LTXVideo, ComfyUI-VideoHelperSuite, Licon MSR,
-#   KJNodes for ComfyUI, ComfyUI-PromptRelay
+#   KJNodes, ComfyUI-PromptRelay, ComfyUI-BFSNodes
 #
 # Models: network volume at /runpod-volume/models (symlinks from your pod)
 
@@ -61,7 +61,15 @@ RUN set -eux; \
       pip install --no-cache-dir -r ComfyUI-PromptRelay/requirements.txt; \
     fi; \
     \
+    # 6) ComfyUI-BFSNodes — https://github.com/alisson-anjos/ComfyUI-BFSNodes
+    rm -rf ComfyUI-BFSNodes; \
+    git clone --depth 1 https://github.com/alisson-anjos/ComfyUI-BFSNodes.git ComfyUI-BFSNodes; \
+    if [ -f ComfyUI-BFSNodes/requirements.txt ]; then \
+      pip install --no-cache-dir -r ComfyUI-BFSNodes/requirements.txt; \
+    fi; \
+    \
     # Re-assert opencv + kornia after any pack requirements
+    # (BFSNodes pulls opencv-python; prefer headless on workers)
     pip install --no-cache-dir "kornia==0.8.1" opencv-python-headless imageio-ffmpeg; \
     \
     echo "=== custom_nodes ==="; \

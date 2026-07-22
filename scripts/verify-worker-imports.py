@@ -41,6 +41,7 @@ required_dirs = [
     "ComfyUI-Licon-MSR",
     "comfyui-kjnodes",
     "ComfyUI-PromptRelay",
+    "ComfyUI-BFSNodes",
 ]
 for name in required_dirs:
     p = Path("/comfyui/custom_nodes") / name
