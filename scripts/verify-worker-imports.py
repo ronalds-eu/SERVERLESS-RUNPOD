@@ -35,16 +35,22 @@ if pb.is_file():
 else:
     errors.append(f"missing {pb}")
 
-vhs = Path("/comfyui/custom_nodes/comfyui-videohelpersuite")
-if not vhs.is_dir():
-    # alternate clone name
-    alt = Path("/comfyui/custom_nodes/ComfyUI-VideoHelperSuite")
-    if not alt.is_dir():
-        print("WARN: VideoHelperSuite folder not found (may still be ok if unused)")
-    else:
+required_dirs = [
+    "ComfyUI-LTXVideo",
+    "comfyui-videohelpersuite",
+    "ComfyUI-Licon-MSR",
+    "comfyui-kjnodes",
+    "ComfyUI-PromptRelay",
+]
+for name in required_dirs:
+    p = Path("/comfyui/custom_nodes") / name
+    alt = Path("/comfyui/custom_nodes") / name.replace("comfyui-", "ComfyUI-")
+    if p.is_dir():
+        print(f"OK found {p}")
+    elif alt.is_dir():
         print(f"OK found {alt}")
-else:
-    print(f"OK found {vhs}")
+    else:
+        errors.append(f"missing custom_nodes/{name}")
 
 if errors:
     print("BUILD IMPORT CHECK FAILED:")

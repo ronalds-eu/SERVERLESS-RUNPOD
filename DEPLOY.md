@@ -78,8 +78,16 @@ Also confirm text encoder / Gemma path used by your working pod workflow.
 
 ## B. Build custom worker image (on a machine with Docker, linux/amd64)
 
-The image installs **opencv-python-headless**, **imageio-ffmpeg**, and pins **kornia==0.8.1**
-so VideoHelperSuite and ComfyUI-LTXVideo import cleanly (fixes `cv2` / `pad` errors in worker logs).
+The image installs **opencv-python-headless**, **imageio-ffmpeg**, and pins **kornia==0.8.1**,
+plus custom nodes for MSR workflows:
+
+| Manager name | GitHub |
+|--------------|--------|
+| ComfyUI-LTXVideo | Lightricks/ComfyUI-LTXVideo |
+| ComfyUI-VideoHelperSuite | Kosinkadink/ComfyUI-VideoHelperSuite |
+| Licon MSR | liconstudio/ComfyUI-Licon-MSR |
+| KJNodes for ComfyUI | kijai/ComfyUI-KJNodes |
+| ComfyUI-PromptRelay | kijai/ComfyUI-PromptRelay |
 
 ```bash
 cd serverless-ltx-i2v
