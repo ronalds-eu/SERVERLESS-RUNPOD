@@ -1,0 +1,38 @@
+{
+  "input": {
+    "workflow": {
+      "1390": {
+        "class_type": "LoadImage",
+        "inputs": { "image": "figure1.png" }
+      },
+      "1391": {
+        "class_type": "LoadImage",
+        "inputs": { "image": "figure2.png" }
+      },
+      "1392": {
+        "class_type": "LoadImage",
+        "inputs": { "image": "background.png" }
+      }
+    },
+    "images": [
+      {
+        "name": "figure1.png",
+        "url": "https://YOUR_CDN/path/figure1.png"
+      },
+      {
+        "name": "figure2.png",
+        "url": "https://YOUR_CDN/path/figure2.png"
+      },
+      {
+        "name": "background.png",
+        "url": "https://YOUR_CDN/path/background.png"
+      }
+    ],
+    "videos": [
+      {
+        "name": "optional_ref.mp4",
+        "url": "https://YOUR_CDN/path/optional_ref.mp4"
+      }
+    ]
+  }
+}

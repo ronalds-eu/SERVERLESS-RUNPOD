@@ -89,6 +89,7 @@ plus custom nodes for MSR workflows:
 | KJNodes for ComfyUI | kijai/ComfyUI-KJNodes |
 | ComfyUI-PromptRelay | kijai/ComfyUI-PromptRelay |
 | ComfyUI-BFSNodes | alisson-anjos/ComfyUI-BFSNodes |
+| ComfyUI-PainterNodes | princepainter/ComfyUI-PainterNodes |
 
 ```bash
 cd serverless-ltx-i2v
@@ -115,7 +116,10 @@ In worker logs you want:
 - **no** `Cannot import ... ComfyUI-LTXVideo ... pad`
 - path line: `Adding extra search path text_encoders /runpod-volume/models/text_encoders`
 
-Submit jobs with `{"input":{"workflow":...}}` only (see `workflows/payload-t2v.json`).
+Submit jobs with `{"input":{"workflow":...}}` (see `workflows/payload-t2v.json`).
+
+For SaaS middleware: pass **HTTPS image/video URLs** (not large base64).  
+See **`docs/MEDIA-URL-INPUT.md`** — worker downloads into `/comfyui/input` then runs the graph.
 
 ---
 

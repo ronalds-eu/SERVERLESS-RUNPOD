@@ -3,7 +3,7 @@
 #
 # Custom nodes for MSR / Ingredients workflows:
 #   ComfyUI-LTXVideo, ComfyUI-VideoHelperSuite, Licon MSR,
-#   KJNodes, ComfyUI-PromptRelay, ComfyUI-BFSNodes
+#   KJNodes, ComfyUI-PromptRelay, ComfyUI-BFSNodes, ComfyUI-PainterNodes
 #
 # Models: network volume at /runpod-volume/models (symlinks from your pod)
 
@@ -68,6 +68,13 @@ RUN set -eux; \
       pip install --no-cache-dir -r ComfyUI-BFSNodes/requirements.txt; \
     fi; \
     \
+    # 7) ComfyUI-PainterNodes — https://github.com/princepainter/ComfyUI-PainterNodes
+    rm -rf ComfyUI-PainterNodes; \
+    git clone --depth 1 https://github.com/princepainter/ComfyUI-PainterNodes.git ComfyUI-PainterNodes; \
+    if [ -f ComfyUI-PainterNodes/requirements.txt ]; then \
+      pip install --no-cache-dir -r ComfyUI-PainterNodes/requirements.txt; \
+    fi; \
+    \
     # Re-assert opencv + kornia after any pack requirements
     # (BFSNodes pulls opencv-python; prefer headless on workers)
     pip install --no-cache-dir "kornia==0.8.1" opencv-python-headless imageio-ffmpeg; \
@@ -81,5 +88,11 @@ RUN python /tmp/verify-worker-imports.py \
 
 # Network volume model paths (includes text_encoders)
 COPY extra_model_paths.yaml /comfyui/extra_model_paths.yaml
+
+# --- Handler: URL image/video ingest + stock worker-comfyui ---
+# start.sh runs `python -u /handler.py`. Keep stock as handler_stock for wrap.
+RUN cp /handler.py /handler_stock.py
+COPY media_ingest.py /media_ingest.py
+COPY handler.py /handler.py
 
 WORKDIR /
